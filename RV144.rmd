@@ -9,6 +9,7 @@ output: html_document
 # Thailand Aids study
 ```{r include=FALSE}
 require(tigerstats)
+
 ```
 
 ## Introduction
@@ -23,19 +24,19 @@ Study Design and Population
 This study was a community-based, randomized, multicenter, double-blind, placebo-controlled efficacy trial of the prime–boost combination of vaccines containing ALVAC-HIV (vCP1521) (Sanofi Pasteur) and AIDSVAX B/E (Global Solutions for Infectious Diseases). For details regarding the vaccines and placebo, see the Supplementary Appendix, available with the full text of this article at NEJM.org. The study was designed to evaluate two coprimary end points: the prevention of HIV-1 infection and the effect of vaccination on the early viral load after infection. The trial was conducted through facilities of the Thai Ministry of Public Health in Rayong and Chon Buri provinces. From September 2003 through December 2005, a total of 16,402 volunteers were enrolled.
 Thai men and women who were between the ages of 18 and 30 years and who were not infected with HIV were recruited from the community without regard to HIV risk (i.e., community risk). Written informed consent was obtained from all volunteers, who were required to pass a written test of understanding. Women were counseled to practice effective contraception until 3 months after the last vaccination; pregnant and breast-feeding women were excluded.
 
-###Study Design and Population
+### Study Design and Population
 This study was a community-based, randomized, multicenter, double-blind, placebo-controlled efficacy trial of the prime–boost combination of vaccines containing ALVAC-HIV (vCP1521) (Sanofi Pasteur) and AIDSVAX B/E (Global Solutions for Infectious Diseases). For details regarding the vaccines and placebo, see the Supplementary Appendix, available with the full text of this article at NEJM.org. The study was designed to evaluate two coprimary end points: the prevention of HIV-1 infection and the effect of vaccination on the early viral load after infection. The trial was conducted through facilities of the Thai Ministry of Public Health in Rayong and Chon Buri provinces. From September 2003 through December 2005, a total of 16,402 volunteers were enrolled.
 Thai men and women who were between the ages of 18 and 30 years and who were not infected with HIV were recruited from the community without regard to HIV risk (i.e., community risk). Written informed consent was obtained from all volunteers, who were required to pass a written test of understanding. Women were counseled to practice effective contraception until 3 months after the last vaccination; pregnant and breast-feeding women were excluded.
 
-###Primary End Points
+###  Primary End Points
 HIV-1 Infection
 HIV-1 infection was diagnosed in 132 subjects (56 in the vaccine group and 76 in the placebo group) during 52,985 person-years of follow-up in the intention-to-treat analysis, in 86 subjects (36 in the vaccine group and 50 in the placebo group) during 36,720 person-years of follow-up in the per-protocol analysis, and in 125 subjects (51 in the vaccine group and 74 in the placebo group) during 52,985 person-years of follow-up in the modified intention-to-treat analysis. One subject in the placebo group who was identified by hospital record as being seropositive for HIV after dying from Pneumocystis jirovecii pneumonia was included in the analysis before the unblinding of the study. This diagnosis of HIV-1 infection was the only one that occurred outside planned procedures.
 We create the following data set
 
 
 ```{r}
-results <- read.csv(file = "ThaiAidsTrial.csv")
-trialtbl=xtabs(~results+treatment,data=results)
+AidsResults <- read.csv(file = "ThaiAidsTrial.csv")
+trialtbl=xtabs(~results+treatment,data=AidsResults)
 ```
 
 
@@ -45,7 +46,16 @@ trialtbl=xtabs(~results+treatment,data=results)
 ### Graphical results
 <!--Display graphical evidence as to the effectiveness of the vaccine with explanations!-->
 
+```{r}
+dd2 <- AidsResults %>% group_by(results,treatment) %>% summarize(count=n()) %>% mutate(prcnt=count/sum(count))
 
+basicC <- ggplot(dd2,aes(x=results,y=count,fill=treatment))
+basicC + geom_bar(stat="identity",position="dodge")
+#Now for percentage plot
+
+basicCC <- ggplot(dd2,aes(x=results,y=prcnt*100,fill=treatment)) 
+basicCC + geom_bar(stat="identity", position = "dodge")
+```
 ### Numerical Results
 
 <!--Display numerical evidence as to the effectiveness of the vaccine with explanations !--> 
